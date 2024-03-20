@@ -1,6 +1,7 @@
 import clsx, { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import prisma from "./db";
+import { notFound } from "next/navigation";
 
 
 export function cn(...inputs: ClassValue[]) {
@@ -26,6 +27,9 @@ export async function getEvents(city: string) {
   const events = await prisma.eventoEvent.findMany({
     where: {
       city: city === "all" ? undefined : capitalize(city)
+    },
+    orderBy: {
+      date: "asc" // Sort by date
     }
   })
 
@@ -44,6 +48,10 @@ export async function getEvent(slug: string) {
       slug: slug
     }
   })
+
+  if (!event) {
+    return notFound()
+  }
 
   return event;
 }
