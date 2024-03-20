@@ -1,7 +1,6 @@
 import React from "react";
-import { EventoEvent } from "@/lib/types";
 import EventCard from "./event-card";
-import { sleep } from "@/lib/utils";
+import { getEvents } from "@/lib/utils";
 
 type EventsListProps = {
   city: string;
@@ -9,10 +8,7 @@ type EventsListProps = {
 
 export default async function EventsList({ city }: EventsListProps) {
   // fetch directly in a server component
-  const rep = await fetch(
-    `https://bytegrad.com/course-assets/projects/evento/api/events?city=${city}`
-  );
-  const events: EventoEvent[] = await rep.json();
+  const events = await getEvents(city);
 
   return (
     <section className="max-w-[1100px] flex flex-wrap gap-10 justify-center px-5">

@@ -1,6 +1,7 @@
 import { EventSection } from "@/components/event-section";
 import H1 from "@/components/h1";
 import { EventoEvent } from "@/lib/types";
+import { getEvent } from "@/lib/utils";
 import { Metadata } from "next";
 import Image from "next/image";
 
@@ -13,10 +14,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = params.slug;
 
-  const resp = await fetch(
-    `https://bytegrad.com/course-assets/projects/evento/api/events/${slug}`
-  );
-  const event: EventoEvent = await resp.json();
+  const event = await getEvent(slug);
 
   return{
     title: `Event: ${event.name}`
@@ -26,10 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function EventPage({ params }: Props) {
   const slug = params.slug;
 
-  const resp = await fetch(
-    `https://bytegrad.com/course-assets/projects/evento/api/events/${slug}`
-  );
-  const event: EventoEvent = await resp.json();
+  const event = await getEvent(slug); // execute only once of the both getEvent
 
   return (
     <main>
