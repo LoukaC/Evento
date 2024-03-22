@@ -1,4 +1,3 @@
-
 import EventsList from "@/components/events-list";
 import H1 from "@/components/h1";
 import { Suspense } from "react";
@@ -12,6 +11,11 @@ type Props = {
   };
 };
 
+type EventsPageProps = Props & {
+  searchParams: {
+    [key: string]: string | string[] | undefined;
+  };
+};
 
 export function generateMetadata({ params }: Props): Metadata {
   const city = params.city;
@@ -20,19 +24,19 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
-
-export default function EventsPage({ params }: Props) {
+export default function EventsPage({ params, searchParams }: EventsPageProps) {
   const city = params.city;
+  const page = searchParams.page || 1; // if no page query, default to 1
 
   return (
     <main className="flex flex-col items-center py-24 px-[20px] min-h-[100vh]">
       <H1 className="mb-28">
-        {city === "all"
-          ? "All Events"
-          : `Events in ${capitalize(city)} `}
+        {city === "all" ? "All Events" : `Events in ${capitalize(city)} `}
       </H1>
-      <Suspense fallback={<Loading />}>
-        <EventsList city={city} />
+      <Suspense key={city + page} fallback={<Loading />}>
+        {/* key is used to force re-render when city or page changes and see the loadinf indicator when pages change*/}
+        <EventsList city={city} page={+page} />
+        {/* page is a string, convert to number*/}
       </Suspense>
     </main>
   );

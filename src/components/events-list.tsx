@@ -1,20 +1,27 @@
 import React from "react";
 import EventCard from "./event-card";
 import { getEvents } from "@/lib/utils";
+import PaginationControls from "./pagination-controls";
 
 type EventsListProps = {
   city: string;
+  page: number;
 };
 
-export default async function EventsList({ city }: EventsListProps) {
+export default async function EventsList({ city, page }: EventsListProps) {
   // fetch directly in a server component
-  const events = await getEvents(city);
+  const { events, totalEvents } = await getEvents(city, page);
+
+  const previousPath = page > 1 ? `/events/${city}?page=${page - 1}` : "";
+  const nextPath =
+    totalEvents > 6 * page ? `/events/${city}?page=${page + 1}` : "";
 
   return (
     <section className="max-w-[1100px] flex flex-wrap gap-10 justify-center px-5">
       {events.map((event) => (
         <EventCard key={event.id} event={event} />
       ))}
+      <PaginationControls previousPath={previousPath} nextPath={nextPath} />
     </section>
   );
 }
