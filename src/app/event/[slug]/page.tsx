@@ -1,7 +1,6 @@
 import { EventSection } from "@/components/event-section";
 import H1 from "@/components/h1";
-import { EventoEvent } from "@prisma/client";
-import { getEvent } from "@/lib/utils";
+import { getEvent } from "@/lib/server-utils";
 import { Metadata } from "next";
 import Image from "next/image";
 
@@ -16,9 +15,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const event = await getEvent(slug);
 
-  return{
-    title: `Event: ${event.name}`
-  }
+  return {
+    title: `Event: ${event.name}`,
+  };
 }
 
 export default async function EventPage({ params }: Props) {

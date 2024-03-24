@@ -1,6 +1,6 @@
 import React from "react";
 import EventCard from "./event-card";
-import { getEvents } from "@/lib/utils";
+import { getEvents } from "@/lib/server-utils";
 import PaginationControls from "./pagination-controls";
 
 type EventsListProps = {
